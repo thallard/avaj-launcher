@@ -15,6 +15,8 @@ public class Baloon extends Aircraft implements Flyabe {
 
     }
 
+    public String getName() { return name; }
+
     // public void registerTower(Weathertower weathertower)
     
 }

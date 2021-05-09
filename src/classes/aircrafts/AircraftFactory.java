@@ -3,12 +3,23 @@ package classes.aircrafts;
 import classes.Coordinates;
 
 public class AircraftFactory {
-    Flyabe newAircraft(String type, String name, int longitude, int latitude, int height)
+    public Flyabe newAircraft(String type, String name, int longitude, int latitude, int height)
     {
         Coordinates coord = new Coordinates(latitude, longitude, height);
-        Helicopter oui = new Helicopter(name, coord);
-        // oui.height = 1;
+       
+        switch (type) {
+            case "Helicopter":
+                Helicopter helicopter = new Helicopter(name, coord);
+                return helicopter;
+            case "Baloon":
+                Baloon baloon = new Baloon(name, coord);
+                return baloon;
+            case "JetPlane":
+                JetPlane jetplane = new JetPlane(name, coord);
+                return jetplane;
+            default:
+                return null;
+        }
 
-        return oui;
     }
 }

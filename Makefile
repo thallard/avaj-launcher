@@ -1,9 +1,8 @@
-
-# $(NAME): mkdir -p obj/
-
 all: 
-	@mkdir -p obj/
-	@find * -name "*.java" > obj/sources.txt
-	@javac @obj/sources.txt
-	@cd src ; java Main
-	cp -rf src/*.class obj/
+	@find * -name "*.java" > sources.txt
+	@javac @sources.txt
+	@cd src ; java Main ../scenario.txt
+	@find . -name "*.class" -type f -delete
+	@rm -rf sources.txt
+	@printf "\e[35mCompiling avaj-launcher ! Executing...\e[0m\n"
+	

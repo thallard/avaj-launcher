@@ -22,22 +22,23 @@ public class Aircraft {
         return name;
     }
 
+    public String getType() {
+        return this.getClass().getSimpleName();
+    }
+
     public long getIdCounter() {
         return idCounter;
     }
 
-    public long getLatitude()
-    {
+    public long getLatitude() {
         return coordinates.getLatitude();
     }
 
-    public long getHeight()
-    {
+    public long getHeight() {
         return coordinates.getHeight();
     }
 
-    public long getLongitude()
-    {
+    public long getLongitude() {
         return coordinates.getLongitude();
     }
 }

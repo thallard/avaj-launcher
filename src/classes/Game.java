@@ -7,16 +7,31 @@ public class Game {
     long countLoops;
     ArrayList<Flyabe> aircrafts;
 
-    public Game()
-    {
+    public Game() {
         aircrafts = new ArrayList<Flyabe>();
     }
 
+    public boolean startSimulation()
+    {
+
+        return (true);
+    }
+
     // Setters
-    public void setCountLoop(long val) { countLoops = val; }
+    public void setCountLoop(long val) {
+        countLoops = val;
+    }
 
     // Getters
-    public ArrayList<Flyabe> getAircrafts() { return aircrafts; }
+    public ArrayList<Flyabe> getAircrafts() {
+        return aircrafts;
+    }
 
-    public void addAircraft(Flyabe aircraft) { aircrafts.add(aircraft); }
+    public long getCountLoops() {
+        return countLoops;
+    }
+
+    public void addAircraft(Flyabe aircraft) {
+        aircrafts.add(aircraft);
+    }
 }

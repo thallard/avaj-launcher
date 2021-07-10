@@ -24,7 +24,8 @@ class Main {
                 Integer.parseInt(height)));
     }
 
-    public static boolean parsing(String path) {
+    public static Game parsing(String path) {
+        Game game = new Game();
         try {
             File file = new File(path);
             String line;
@@ -32,11 +33,10 @@ class Main {
             if (!file.exists() || !file.canRead()) {
                 System.out.println(
                         "\u001B[91mError : File doesnt exist/not enough permissions : \"" + path + "\".\u001B[0m");
-                return (false);
+                return (null);
             }
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
-            Game game = new Game();
             AircraftFactory factory = new AircraftFactory();
 
             while ((line = br.readLine()) != null) {
@@ -49,7 +49,7 @@ class Main {
                     if (nbLoops < 0) {
                         System.out.println("\u001B[91mError (scenario file) : Invalid number of loops.\u001B[0m");
                         br.close();
-                        return (false);
+                        return (null);
                     }
                     game.setCountLoop(nbLoops);
                     continue;
@@ -63,18 +63,10 @@ class Main {
                         System.out.println(
                                 "\u001B[91mError (scenario file) : Invalid name of aircraft. (" + tmp + ")\u001B[0m");
                         br.close();
-                        return (false);
+                        return (null);
                     }
-                    // tmp = line.substring(1, tmp.indexOf(" "));
-                    // System.out.println(line);
                     game.addAircraft(createAircraft(factory, line));
                 }
-
-                // } else {
-                // // factory.
-                // game.addAircraft(factory.newAircraft(tmp, tmp, 10, 20, 30));
-                // }
-                // System.out.println(line);
             }
             br.close();
             ArrayList<Flyabe> aircrafts = game.getAircrafts();
@@ -82,10 +74,9 @@ class Main {
                 System.out.println("Name : " + flyabe.getType() + " " + flyabe.getName() + " " + flyabe.getLongitude() + " " + flyabe.getLatitude() + " " + flyabe.getHeight());
         } catch (Exception e) {
             System.out.println("\u001B[91mError (scenario file) " + e + ": Invalid number of loops.\u001B[0m");
-            return (false);
+            return (null);
         }
-
-        return (true);
+        return (game);
     }
 
     public static void main(String[] args) {
@@ -93,11 +84,12 @@ class Main {
             System.out.println("\u001B[91mNumbers of parameters incorrect. (Need one scenario file)");
             return;
         }
-        if (!parsing(args[0]))
+        Game game;
+        if ((game = parsing(args[0])) == null)
             return;
 
-        System.out.println("Hello, World! " + args[0]);
+        System.out.println("Hello, World! " + args[0] + " " + game.getCountLoops());
         System.out.println("\uD83C\uDF27");
-
+        
     }
 }

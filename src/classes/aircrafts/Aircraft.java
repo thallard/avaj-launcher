@@ -25,4 +25,19 @@ public class Aircraft {
     public long getIdCounter() {
         return idCounter;
     }
+
+    public long getLatitude()
+    {
+        return coordinates.getLatitude();
+    }
+
+    public long getHeight()
+    {
+        return coordinates.getHeight();
+    }
+
+    public long getLongitude()
+    {
+        return coordinates.getLongitude();
+    }
 }

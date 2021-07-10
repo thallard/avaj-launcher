@@ -4,9 +4,29 @@ import classes.*;
 import classes.aircrafts.*;
 
 class Main {
+
+    // Parse each line of aircrafts in scenario file to return an object Flyabe
+    // which pairs with the type of Aircraft
+    public static Flyabe createAircraft(AircraftFactory factory, String line) {
+        System.out.println("create airfracft : " + line + "\n");
+        String tmp = line;
+
+        String type = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+        tmp = tmp.replace(type + " ", "");
+        String name = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+        tmp = tmp.replace(name + " ", "");
+        String longitude = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+        tmp = tmp.replace(longitude + " ", "");
+        String latitude = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+        tmp = tmp.replace(latitude + " ", "");
+        String height = tmp.replace(tmp + " ", "");
+        return (factory.newAircraft(type, name, Integer.parseInt(longitude), Integer.parseInt(latitude),
+                Integer.parseInt(height)));
+    }
+
     public static boolean parsing(String path) {
         try {
-            File file = new File(path.toString());
+            File file = new File(path);
             String line;
             int count = 0;
             if (!file.exists() || !file.canRead()) {
@@ -23,7 +43,7 @@ class Main {
                 String tmp = line;
                 if (line.length() == 0)
                     continue;
-                // Parse first line
+                // Parse first line (number of loops)
                 if (count++ == 0) {
                     long nbLoops = Long.parseLong(line);
                     if (nbLoops < 0) {
@@ -35,7 +55,8 @@ class Main {
                     continue;
                 }
                 // Parse aircrafts names and coordinates
-                if (!tmp.equalsIgnoreCase("Baloon") && !tmp.equalsIgnoreCase("JetPlane") && !tmp.equalsIgnoreCase("Helicopter") && tmp.contains(" ")) {
+                if (!tmp.equalsIgnoreCase("Baloon") && !tmp.equalsIgnoreCase("JetPlane")
+                        && !tmp.equalsIgnoreCase("Helicopter") && tmp.contains(" ")) {
                     tmp = tmp.substring(0, tmp.indexOf(" "));
                     if (!tmp.equalsIgnoreCase("Baloon") && !tmp.equalsIgnoreCase("JetPlane")
                             && !tmp.equalsIgnoreCase("Helicopter")) {
@@ -45,26 +66,25 @@ class Main {
                         return (false);
                     }
                     // tmp = line.substring(1, tmp.indexOf(" "));
-                    game.addAircraft(factory.newAircraft(tmp, tmp, 10, 20, 30));
+                    // System.out.println(line);
+                    game.addAircraft(createAircraft(factory, line));
                 }
+
                 // } else {
-                //     // factory.
-                //     game.addAircraft(factory.newAircraft(tmp, tmp, 10, 20, 30));
+                // // factory.
+                // game.addAircraft(factory.newAircraft(tmp, tmp, 10, 20, 30));
                 // }
                 // System.out.println(line);
             }
             br.close();
             ArrayList<Flyabe> aircrafts = game.getAircrafts();
-            for( Flyabe flyabe : aircrafts) 
-                System.out.println("Name : " + flyabe.getName() );
+            for (Flyabe flyabe : aircrafts)
+                System.out.println("Name : " + flyabe.getType() + " " + flyabe.getName() + " " + flyabe.getLongitude() + " " + flyabe.getLatitude() + " " + flyabe.getHeight());
         } catch (Exception e) {
-            System.out.println("\u001B[91mError (scenario file) : Invalid number of loops.\u001B[0m");
+            System.out.println("\u001B[91mError (scenario file) " + e + ": Invalid number of loops.\u001B[0m");
             return (false);
         }
-          
-        {
 
-        }
         return (true);
     }
 

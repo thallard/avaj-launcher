@@ -8,8 +8,9 @@ public class Aircraft {
     protected Coordinates coordinates;
     private long idCounter;
 
-    Aircraft(String name, Coordinates coord) {
+    Aircraft(int id, String name, Coordinates coord) {
         super();
+        this.id = id;
         this.coordinates = coord;
         this.name = name;
     }
@@ -30,15 +31,6 @@ public class Aircraft {
         return idCounter;
     }
 
-    public long getLatitude() {
-        return coordinates.getLatitude();
-    }
 
-    public long getHeight() {
-        return coordinates.getHeight();
-    }
 
-    public long getLongitude() {
-        return coordinates.getLongitude();
-    }
 }

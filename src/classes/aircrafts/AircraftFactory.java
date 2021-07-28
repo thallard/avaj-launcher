@@ -3,20 +3,19 @@ package classes.aircrafts;
 import classes.Coordinates;
 
 public class AircraftFactory {
-    public Flyabe newAircraft(String type, String name, int longitude, int latitude, int height)
+    public static int current_id = 1;
+
+    public Flyable newAircraft(String type, String name, int longitude, int latitude, int height)
     {
         Coordinates coord = new Coordinates(latitude, longitude, height);
        
         switch (type) {
             case "Helicopter":
-                Helicopter helicopter = new Helicopter(name, coord);
-                return helicopter;
+                return new Helicopter(current_id++, name, coord);
             case "Baloon":
-                Baloon baloon = new Baloon(name, coord);
-                return baloon;
+                return new Baloon(current_id++, name, coord);
             case "JetPlane":
-                JetPlane jetplane = new JetPlane(name, coord);
-                return jetplane;
+                return new JetPlane(current_id++, name, coord);
             default:
                 return null;
         }

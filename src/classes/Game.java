@@ -2,36 +2,44 @@ package classes;
 
 import java.util.ArrayList;
 import classes.aircrafts.*;
+import classes.weather.*;
 
 public class Game {
-    long countLoops;
-    ArrayList<Flyabe> aircrafts;
+    public long countLoops;
+    public ArrayList<Flyable> aircrafts;
+    public static Tower tower = new Tower();
+    public WeatherTower weatherTower;
 
     public Game() {
-        aircrafts = new ArrayList<Flyabe>();
-    }
-
-    public boolean startSimulation()
-    {
-
-        return (true);
+        System.out.println("ici");
+        aircrafts = new ArrayList<Flyable>();
+        weatherTower = new WeatherTower();
     }
 
     // Setters
-    public void setCountLoop(long val) {
-        countLoops = val;
-    }
+    public void setCountLoop(long val) { countLoops = val; }
 
     // Getters
-    public ArrayList<Flyabe> getAircrafts() {
-        return aircrafts;
-    }
+    public ArrayList<Flyable> getAircrafts() { return aircrafts; }
+    public WeatherTower getWeatherTower() { return weatherTower; }
+    public long getCountLoops() { return countLoops; }
 
-    public long getCountLoops() {
-        return countLoops;
-    }
 
-    public void addAircraft(Flyabe aircraft) {
+    public void addAircraft(Flyable aircraft) {
         aircrafts.add(aircraft);
+        tower.register(aircraft);
+        String className = aircraft.getClass().getSimpleName();
+        switch (className) {
+            case "Baloon":
+                ((Baloon) aircraft).registerTower(this.weatherTower);
+                break;
+            case "Helicopter":
+                ((Helicopter) aircraft).registerTower(this.weatherTower);
+                break;
+            case "JetPlane":
+                ((JetPlane) aircraft).registerTower(this.weatherTower);
+            default:
+                break;
+        }
     }
 }

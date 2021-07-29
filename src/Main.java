@@ -22,16 +22,18 @@ class Main {
         return (factory.newAircraft(type, name, Integer.parseInt(longitude), Integer.parseInt(latitude), Integer.parseInt(height)));
     }
 
-    public static Game parsing(String path) {
+    public static Game parsing(String path) throws FileException {
         Game game = new Game();
-
+        File file = null;
         try {
-            File file = new File(path);
+            file = new File(path);
             String line;
+
             int count = 0;
             if (!file.exists() || !file.canRead()) {
-                System.out.println("\033[91mError : File does'nt exist/not enough permissions : \"" + path + "\".\033[0m");
-                return (null);
+                throw new FileException(path);
+//                System.out.println("\033[91mError : File does'nt exist/not enough permissions : \"" + path + "\".\033[0m");
+//                return (null);
             }
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
@@ -65,7 +67,8 @@ class Main {
             }
             br.close();
         } catch (Exception e) {
-            System.out.println("\u001B[91mError (scenario file) " + e + ": Invalid number of loops.\u001B[0m");
+            if (file.exists())
+                System.out.println("\u001B[91mError (scenario file) " + e + ": Invalid number of loops.\u001B[0m");
             return (null);
         }
         return (game);
@@ -83,7 +86,12 @@ class Main {
             System.out.println("\u001B[91mNumbers of parameters incorrect. (Need one scenario file)");
             return;
         }
-        Game game = parsing(args[0]);
+        Game game = null; 
+        try {
+            game = parsing(args[0]);
+        } catch (FileException e) {
+            return ;
+        }
         if (game == null)
             return;
         simulation(game);

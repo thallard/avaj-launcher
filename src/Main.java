@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 import classes.*;
 import classes.aircrafts.*;
 import classes.weather.WeatherTower;
@@ -65,9 +64,6 @@ class Main {
                 }
             }
             br.close();
-//            ArrayList<Flyable> Flyables = game.getAircrafts();
-//            for (Flyable Flyable : Flyables)
-//                System.out.println("Name : " + Flyable.getType() + " " + Flyable.getName() + " " + Flyable.getLongitude() + " " + Flyable.getLatitude() + " " + Flyable.getHeight());
         } catch (Exception e) {
             System.out.println("\u001B[91mError (scenario file) " + e + ": Invalid number of loops.\u001B[0m");
             return (null);
@@ -79,12 +75,7 @@ class Main {
         WeatherTower weatherTower = game.getWeatherTower();
 
         for (int loop = 0; loop < game.getCountLoops(); loop++)
-        {
-            for (Flyable flyable: game.getAircrafts())
-            {
-                flyable.updateConditions();
-            }
-        }
+           weatherTower.changeWeather();
     }
 
     public static void main(String[] args) {
@@ -92,7 +83,6 @@ class Main {
             System.out.println("\u001B[91mNumbers of parameters incorrect. (Need one scenario file)");
             return;
         }
-
         Game game = parsing(args[0]);
         if (game == null)
             return;

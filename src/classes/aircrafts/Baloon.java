@@ -7,8 +7,7 @@ import javafx.scene.layout.CornerRadii;
 public class Baloon extends Aircraft implements Flyable {
     private WeatherTower weatherTower;
 
-    public Baloon(int id, String name, Coordinates coord)
-    {
+    public Baloon(int id, String name, Coordinates coord) {
         super(id, name, coord);
     }
 
@@ -28,11 +27,14 @@ public class Baloon extends Aircraft implements Flyable {
         return coordinates;
     }
 
-    public void updateConditions()
-    {
+    public void updateConditions() {
         Coordinates coord = new Coordinates(this.getLatitude(), this.getLongitude(), this.getHeight());
         Coordinates baloonCord = this.getCoordinates();
-
+        if (baloonCord.getHeight() <= 0)
+        {
+            weatherTower.unregister(this);
+            return ;
+        }
         switch (weatherTower.getWeather(coord)) {
             case "SUN":
                 System.out.println("\033[0;33m" + getClass().getSimpleName() + "#" + this.getName() + "(" + this.getId() + "): Let's enjoy the good weather and take some pics.\033[0m");
@@ -54,12 +56,12 @@ public class Baloon extends Aircraft implements Flyable {
             default:
                 break;
         }
+        if (baloonCord.getHeight() <= 0)
+            weatherTower.unregister(this);
     }
 
-    public void registerTower(WeatherTower weatherTower)
-    {
+    public void registerTower(WeatherTower weatherTower) {
         this.weatherTower = weatherTower;
-        System.out.println("\033[0;32mTower says: " + getClass().getSimpleName() + "#" + getName() + "(" + getId() + ") registered to weather tower.\033[0;0m");
     }
     
 }

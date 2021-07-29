@@ -30,7 +30,4 @@ public class Aircraft {
     public long getIdCounter() {
         return idCounter;
     }
-
-
-
 }

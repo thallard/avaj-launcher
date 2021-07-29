@@ -4,33 +4,29 @@ import java.util.*;
 import classes.aircrafts.*;
 
 public class Tower {
-    private ArrayList<Flyable> observers;
-
-    public Tower()
-    {
-        System.out.println("ici fdp fdp fdp");
-        observers = new ArrayList<>();
-    }
+    private ArrayList<Flyable> observers = new ArrayList<Flyable>();
 
     public void register(Flyable flyable)
     {
-        observers.add(flyable);
-        System.out.println("taille de l'arraylist = " + this.observers.size());
+        if (flyable.getHeight() > 0)
+        {
+            observers.add(flyable);
+            System.out.println("\033[0;32mTower says: " + flyable.getClass().getSimpleName() + "#" + flyable.getName() + "(" + flyable.getId() + ") registered to weather tower.\033[0;0m");
+        }
     }
 
     public void unregister(Flyable flyable)
     {
-        System.out.println(getClass().getSimpleName() + "#" + flyable.getName() + "(" + flyable.getId() + ") landing.");
-        observers.remove(flyable);
-
+        System.out.println("\033[31m" + flyable.getClass().getSimpleName() + "#" + flyable.getName() + "(" + flyable.getId() + ") landing.\033[0m");
+        System.out.println("\033[31mTower says: " + flyable.getClass().getSimpleName() + "#" + flyable.getName() + "(" + + flyable.getId() +  ") unregistered from weather tower.\033[0m");
     }
 
     protected void conditionsChanged() {
-        System.out.println("taille de l'arraylist = " + this.observers.size());
-        for (int i = 0; i < this.observers.size(); i++) {
-            System.out.println(this.observers.get(i).getHeight());
-            if (this.observers.get(i).getHeight() <= 0)
-                unregister(this.observers.get(i));
-        }
+        for (Flyable flyable : observers)
+            flyable.updateConditions();
+    }
+
+    public ArrayList<Flyable> getObservers() {
+        return observers;
     }
 }

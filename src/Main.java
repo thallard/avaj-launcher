@@ -30,11 +30,8 @@ class Main {
             String line;
 
             int count = 0;
-            if (!file.exists() || !file.canRead()) {
+            if (!file.exists() || !file.canRead())
                 throw new FileException(path);
-//                System.out.println("\033[91mError : File does'nt exist/not enough permissions : \"" + path + "\".\033[0m");
-//                return (null);
-            }
             FileReader fr = new FileReader(file);
             BufferedReader br = new BufferedReader(fr);
             AircraftFactory factory = new AircraftFactory();
@@ -67,6 +64,7 @@ class Main {
             }
             br.close();
         } catch (Exception e) {
+            assert file != null;
             if (file.exists())
                 System.out.println("\u001B[91mError (scenario file) " + e + ": Invalid number of loops.\u001B[0m");
             return (null);
@@ -86,14 +84,14 @@ class Main {
             System.out.println("\u001B[91mNumbers of parameters incorrect. (Need one scenario file)");
             return;
         }
-        Game game = null; 
+        Game game;
         try {
-            game = parsing(args[0]);
+            if ((game = parsing(args[0])) == null)
+                return ;
         } catch (FileException e) {
             return ;
         }
-        if (game == null)
-            return;
+
         simulation(game);
     }
 }

@@ -30,11 +30,7 @@ public class Baloon extends Aircraft implements Flyable {
     public void updateConditions() {
         Coordinates coord = new Coordinates(this.getLatitude(), this.getLongitude(), this.getHeight());
         Coordinates baloonCord = this.getCoordinates();
-        if (baloonCord.getHeight() <= 0)
-        {
-            weatherTower.unregister(this);
-            return ;
-        }
+
         switch (weatherTower.getWeather(coord)) {
             case "SUN":
                 System.out.println("\033[0;33m" + getClass().getSimpleName() + "#" + this.getName() + "(" + this.getId() + "): Let's enjoy the good weather and take some pics.\033[0m");
@@ -56,8 +52,6 @@ public class Baloon extends Aircraft implements Flyable {
             default:
                 break;
         }
-        if (baloonCord.getHeight() <= 0)
-            weatherTower.unregister(this);
     }
 
     public void registerTower(WeatherTower weatherTower) {

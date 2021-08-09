@@ -4,25 +4,62 @@ import classes.aircrafts.*;
 import classes.weather.WeatherTower;
 
 class Main {
+    // Constant variables for Aircraft names in MD5
+    public static final String baloonHash = "994736b4f0aec72f6e5ae580051d012f";
+    public static final String jetplaneHash = "3145ba416e54a114cb3aac3f174c22dd";
+    public static final String helicopterHash = "d0309a20530ee9b892113d29949ca11c";
 
     // Parse each line of aircrafts in scenario file to return an object Flyable
     // which pairs with the type of Aircraft
-    public static Flyable createAircraft(AircraftFactory factory, String line) {
+    public static Flyable createAircraft(AircraftFactory factory, String line, boolean isMD5) throws Exception {
         String tmp = line;
 
-        String type = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
-        tmp = tmp.replace(type + " ", "");
+        String type = null, typeToRemove = null;
+
+        // Replace hash type by the real type
+            typeToRemove = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+            switch (typeToRemove) {
+                case baloonHash:
+                    type = "Baloon";
+                    break;
+                case jetplaneHash:
+                    type = "JetPlane";
+                    break;
+                case helicopterHash:
+                    type = "Helicopter";
+                    break;
+                default:
+                    type = typeToRemove;
+            }
+
+
+
+//            type = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+//            typeToRemove = type;
+
+
+
+        System.out.println("type = " + type);
+        System.out.println("typetoremove = " + typeToRemove);
+        tmp = tmp.replace(typeToRemove + " ", "");
         String name = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+        System.out.println(name);
         tmp = tmp.replace(name + " ", "");
+
         String longitude = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+        System.out.println(longitude);
         tmp = tmp.replace(longitude + " ", "");
+
         String latitude = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
+        System.out.println(latitude);
         tmp = tmp.replace(latitude + " ", "");
+
         String height = tmp.replace(tmp + " ", "");
+        System.out.println(height);
         return (factory.newAircraft(type, name, Integer.parseInt(longitude), Integer.parseInt(latitude), Integer.parseInt(height)));
     }
 
-    public static Game parsing(String path) throws FileException {
+    public static Game parsing(String path, boolean isMD5) throws FileException {
         Game game = new Game();
         File file = null;
         try {
@@ -48,21 +85,35 @@ class Main {
                         br.close();
                         return (null);
                     }
+
                     game.setCountLoop(nbLoops);
                     continue;
                 }
                 // Parse aircrafts names and coordinates
-                if (!tmp.equalsIgnoreCase("Baloon") && !tmp.equalsIgnoreCase("JetPlane") && !tmp.equalsIgnoreCase("Helicopter") && tmp.contains(" ")) {
-                    tmp = tmp.substring(0, tmp.indexOf(" "));
-                    if (!tmp.equalsIgnoreCase("Baloon") && !tmp.equalsIgnoreCase("JetPlane") && !tmp.equalsIgnoreCase("Helicopter")) {
+//                if (!tmp.equalsIgnoreCase("Baloon") && !tmp.equalsIgnoreCase("JetPlane") && !tmp.equalsIgnoreCase("Helicopter") && tmp.contains(" ")) {
+
+                tmp = tmp.substring(0, tmp.indexOf(" "));
+                switch (tmp) {
+                    case baloonHash:
+                    case helicopterHash:
+                    case jetplaneHash:
+                    case "Helicopter":
+                    case "Baloon":
+                    case "JetPlane":
+                        System.out.println("oui");
+                        game.addAircraft(createAircraft(factory, line, isMD5));
+                        break;
+                    default:
+                        System.out.println("nope");
                         System.out.println("\u001B[91mError (scenario file) : Invalid name of aircraft. (" + tmp + ")\u001B[0m");
                         br.close();
                         return (null);
-                    }
-                    game.addAircraft(createAircraft(factory, line));
+//                    }
                 }
+                System.out.println("loop");
             }
             br.close();
+
         } catch (Exception e) {
             assert file != null;
             if (file.exists())
@@ -80,13 +131,16 @@ class Main {
     }
 
     public static void main(String[] args) {
-        if (args.length != 1) {
+        boolean isMD5 = false;
+        if (args.length != 1 && args.length != 2) {
             System.out.println("\u001B[91mNumbers of parameters incorrect. (Need one scenario file)");
             return;
         }
+        if (args.length == 2 && args[1].equalsIgnoreCase("MD5"))
+            isMD5 = true;
         Game game;
         try {
-            if ((game = parsing(args[0])) == null)
+            if ((game = parsing(args[0], isMD5)) == null)
                 return ;
         } catch (FileException e) {
             return ;

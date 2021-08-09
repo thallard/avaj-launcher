@@ -30,11 +30,7 @@ public class JetPlane extends Aircraft implements Flyable {
     {
         Coordinates coord = new Coordinates(this.getLatitude(), this.getLongitude(), this.getHeight());
         Coordinates jetCoord = this.getCoordinates();
-        if (jetCoord.getHeight() <= 0)
-        {
-            weatherTower.unregister(this);
-            return ;
-        }
+
         switch (weatherTower.getWeather(coord)) {
             case "SUN":
                 System.out.println("\033[0;33m" + getClass().getSimpleName() + "#" + this.getName() + "(" + this.getId() + "): What a sun today!\033[0m");
@@ -56,8 +52,6 @@ public class JetPlane extends Aircraft implements Flyable {
             default:
                 break;
         }
-        if (jetCoord.getHeight() <= 0)
-            weatherTower.unregister(this);
     }
 
     public void registerTower(WeatherTower weatherTower) {

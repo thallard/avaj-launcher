@@ -12,9 +12,7 @@ class Main {
     // Parse each line of aircrafts in scenario file to return an object Flyable
     // which pairs with the type of Aircraft
     public static Flyable createAircraft(AircraftFactory factory, String line, boolean isMD5) throws Exception {
-        String tmp = line;
-
-        String type = null, typeToRemove = null;
+        String tmp = line, type = null, typeToRemove = null;
 
         // Replace hash type by the real type
             typeToRemove = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
@@ -32,30 +30,14 @@ class Main {
                     type = typeToRemove;
             }
 
-
-
-//            type = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
-//            typeToRemove = type;
-
-
-
-        System.out.println("type = " + type);
-        System.out.println("typetoremove = " + typeToRemove);
         tmp = tmp.replace(typeToRemove + " ", "");
         String name = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
-        System.out.println(name);
         tmp = tmp.replace(name + " ", "");
-
         String longitude = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
-        System.out.println(longitude);
         tmp = tmp.replace(longitude + " ", "");
-
         String latitude = tmp.substring(0, tmp.indexOf(" ")).replace(tmp + " ", "");
-        System.out.println(latitude);
         tmp = tmp.replace(latitude + " ", "");
-
         String height = tmp.replace(tmp + " ", "");
-        System.out.println(height);
         return (factory.newAircraft(type, name, Integer.parseInt(longitude), Integer.parseInt(latitude), Integer.parseInt(height)));
     }
 
@@ -89,31 +71,21 @@ class Main {
                     game.setCountLoop(nbLoops);
                     continue;
                 }
-                // Parse aircrafts names and coordinates
-//                if (!tmp.equalsIgnoreCase("Baloon") && !tmp.equalsIgnoreCase("JetPlane") && !tmp.equalsIgnoreCase("Helicopter") && tmp.contains(" ")) {
 
+                // Parse aircrafts names and coordinates
                 tmp = tmp.substring(0, tmp.indexOf(" "));
                 switch (tmp) {
-                    case baloonHash:
-                    case helicopterHash:
-                    case jetplaneHash:
-                    case "Helicopter":
-                    case "Baloon":
-                    case "JetPlane":
-                        System.out.println("oui");
+                    case baloonHash: case helicopterHash: case jetplaneHash:
+                    case "Helicopter": case "Baloon": case "JetPlane":
                         game.addAircraft(createAircraft(factory, line, isMD5));
                         break;
                     default:
-                        System.out.println("nope");
                         System.out.println("\u001B[91mError (scenario file) : Invalid name of aircraft. (" + tmp + ")\u001B[0m");
                         br.close();
                         return (null);
-//                    }
                 }
-                System.out.println("loop");
             }
             br.close();
-
         } catch (Exception e) {
             assert file != null;
             if (file.exists())
